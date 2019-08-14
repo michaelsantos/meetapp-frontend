@@ -50,7 +50,7 @@ export const Profile = styled.div`
 
   button {
     height: 42px;
-    width: 71px;
+    padding: 0 20px 0 20px;
     background: #d44059;
     font-weight: bold;
     color: #fff;

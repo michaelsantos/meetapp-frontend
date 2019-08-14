@@ -3,7 +3,7 @@ import { darken } from 'polished';
 
 export const Wrapper = styled.div`
   height: 100%;
-  background: linear-gradient(180deg, #22202c, #402845);
+  background: linear-gradient(#22202c, #402845);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,19 +17,20 @@ export const Content = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 50px;
 
     input {
       background: rgba(0, 0, 0, 0.2);
       border: 0;
       border-radius: 4px;
-      height: 44px;
+      height: 50px;
       padding: 0 15px;
       color: #fff;
       margin: 0 0 10px;
+      font-size: 18px;
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.5);
       }
     }
 
@@ -39,6 +40,7 @@ export const Content = styled.div`
       margin: 0 5px 10px;
       font-weight: bold;
       opacity: 0.8;
+      font-size: 14px;
     }
 
     button {
@@ -49,7 +51,7 @@ export const Content = styled.div`
       color: #fff;
       border: 0;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 18px;
       transition: background 0.2s;
 
       &:hover {
@@ -59,9 +61,10 @@ export const Content = styled.div`
 
     a {
       color: #fff;
-      margin-top: 15px;
+      margin-top: 20px;
+      font-weight: bold;
       font-size: 16px;
-      opacity: 0.8;
+      opacity: 0.6;
 
       &:hover {
         opacity: 1;

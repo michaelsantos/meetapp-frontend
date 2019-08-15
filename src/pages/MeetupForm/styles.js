@@ -4,7 +4,6 @@ import { darken } from 'polished';
 export const Container = styled.div`
   max-width: 940px;
   margin: 50px auto;
-
   form {
     display: flex;
     flex-direction: column;
@@ -17,6 +16,22 @@ export const Container = styled.div`
       height: 50px;
       padding: 0 15px;
       color: #fff;
+      margin: 0 0 10px;
+      font-size: 18px;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    textarea {
+      background: rgba(0, 0, 0, 0.2);
+      border: 0;
+      height: 200px;
+      border-radius: 4px;
+      padding: 15px;
+      color: #fff;
+      resize: none;
       margin: 0 0 10px;
       font-size: 18px;
 

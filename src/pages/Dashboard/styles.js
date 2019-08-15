@@ -32,6 +32,7 @@ export const Container = styled.div`
 
       display: flex;
       align-self: flex-end;
+      align-items: center;
 
       svg {
         margin-right: 10px;
@@ -51,7 +52,7 @@ export const Container = styled.div`
 `;
 
 export const Meetup = styled.li`
-  padding: 20px 20px 15px 30px;
+  padding: 20px 20px 20px 30px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.1);
   display: flex;
@@ -78,5 +79,9 @@ export const Meetup = styled.li`
       background: none;
       color: #fff;
     }
+  }
+
+  :hover {
+    background: rgba(255, 255, 255, 0.15);
   }
 `;

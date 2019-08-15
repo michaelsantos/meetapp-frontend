@@ -22,7 +22,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased !important;
   }
 
-  body, input, button {
+  body, input, button, textarea {
     font: 14px 'Helvetica', sans-serif;
   }
 

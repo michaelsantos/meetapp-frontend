@@ -7,10 +7,10 @@ import api from '~/services/api';
 import { Container, Content } from './styles';
 
 export default function BannerInput() {
-  const { defaultValue, registerField } = useField('banner');
+  const { defaultValue, registerField } = useField('File');
 
-  const [file, setFile] = useState(defaultValue && defaultValue.id);
-  const [preview, setPreview] = useState(defaultValue && defaultValue.url);
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
 
   const ref = useRef();
 
@@ -21,6 +21,9 @@ export default function BannerInput() {
         ref: ref.current,
         path: 'dataset.file',
       });
+
+      setPreview(defaultValue && defaultValue.url);
+      setFile(defaultValue && defaultValue.id);
     }
   }, [ref, defaultValue]); // eslint-disable-line
 

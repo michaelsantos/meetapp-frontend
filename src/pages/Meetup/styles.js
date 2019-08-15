@@ -56,8 +56,8 @@ export const Content = styled.div`
   img {
     border-radius: 4px;
     align-self: center;
-    max-width: 940px;
-    max-height: 300px;
+    width: 940px;
+    height: 300px;
   }
 
   span {

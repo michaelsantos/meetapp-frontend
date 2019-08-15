@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { parseISO, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import {
   MdEdit,
   MdDeleteForever,
@@ -7,53 +9,68 @@ import {
 } from 'react-icons/md';
 
 import history from '~/services/history';
-
-import meetup from '~/assets/evento.png';
+import api from '~/services/api';
 
 import { Container, Content } from './styles';
 
-export default function Meetup() {
-  function handleMeetup() {
-    history.push('/form');
+export default function Meetup({ match }) {
+  const [meetup, setMeetup] = useState();
+
+  useEffect(() => {
+    async function loadMeetup() {
+      const { data } = await api.get(`/meetups/${match.params.id}`);
+
+      setMeetup(data);
+    }
+
+    loadMeetup();
+  }, [match.params.id]);
+
+  function handleEdit(id) {
+    history.push(`/meetup-register/${id}`);
+  }
+
+  async function handleCancel(id) {
+    await api.delete(`/meetups/${id}`);
+
+    history.push('/dashboard');
   }
 
   return (
-    <Container>
-      <header>
-        <h1>Meetup de React Native</h1>
-        <aside>
-          <button type="button" onClick={handleMeetup}>
-            <MdEdit />
-            Editar
-          </button>
-          <button type="button">
-            <MdDeleteForever />
-            Cancelar
-          </button>
-        </aside>
-      </header>
-      <Content>
-        <img src={meetup} alt="Evento" />
-        <span>
-          O meetup de React Native é um evento que reúne a comunidade mobile
-          utilizando React a fim de compartilhar conhecimento. Todos são
-          convidados.
-          <br />
-          <br />
-          Caso queira participar como palestrante do meetupenvie um e-mail para
-          organizacao@meetup.com.br
-        </span>
-        <div>
+    !!meetup && (
+      <Container>
+        <header>
+          <h1>{meetup.title}</h1>
+          <aside>
+            <button type="button" onClick={() => handleEdit(meetup.id)}>
+              <MdEdit />
+              Editar
+            </button>
+            <button type="button" onClick={() => handleCancel(meetup.id)}>
+              <MdDeleteForever />
+              Cancelar
+            </button>
+          </aside>
+        </header>
+        <Content>
+          <img src={meetup.File.url} alt={meetup.title} />
+          <span>{meetup.description}</span>
           <div>
-            <MdInsertInvitation size={20} />
+            <div>
+              <MdInsertInvitation size={20} />
+            </div>
+            <span>
+              {format(parseISO(meetup.date), "d 'de' MMMM', às 'H'h'", {
+                locale: pt,
+              })}
+            </span>
+            <div>
+              <MdPlace size={20} />
+            </div>
+            <span>{meetup.location}</span>
           </div>
-          <span>24 de Junho, às 20h</span>
-          <div>
-            <MdPlace size={20} />
-          </div>
-          <span>Rua Guilherme Gembala, 260</span>
-        </div>
-      </Content>
-    </Container>
+        </Content>
+      </Container>
+    )
   );
 }

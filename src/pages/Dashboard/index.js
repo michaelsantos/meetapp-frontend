@@ -1,101 +1,64 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { parseISO, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import { MdAddCircleOutline, MdChevronRight } from 'react-icons/md';
 
 import history from '~/services/history';
+import api from '~/services/api';
 
 import { Container, Meetup } from './styles';
 
 export default function Dashboard() {
+  const [meetups, setMeetups] = useState([]);
+
+  useEffect(() => {
+    async function loadMeetups() {
+      const { data } = await api.get('/organizer');
+
+      setMeetups(data);
+    }
+
+    loadMeetups();
+  }, []);
+
   function handleNewMeetup() {
-    history.push('/meetup');
+    history.push('/meetup-register');
+  }
+
+  function handlViewMeetup(id) {
+    history.push(`/meetup/${id}`);
   }
 
   return (
     <Container>
       <header>
         <h1>Meus meetups</h1>
-        <Link to="/meetup">
-          <button type="button" onClick={handleNewMeetup}>
-            <MdAddCircleOutline />
-            Novo meetup
-          </button>
-        </Link>
+        <button type="button" onClick={handleNewMeetup}>
+          <MdAddCircleOutline />
+          Novo meetup
+        </button>
       </header>
 
       <ul>
-        <Meetup>
-          <strong>Meetup de React Native</strong>
-          <div>
-            <span>24 de Julho, às 20h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
-        <Meetup>
-          <strong>Meetup de React JS</strong>
-          <div>
-            <span>30 de Julho, às 19h</span>
-            <button type="button">
-              <MdChevronRight size={24} />
-            </button>
-          </div>
-        </Meetup>
+        {meetups.map(meetup => (
+          <Meetup key={meetup.id}>
+            <strong>{meetup.title}</strong>
+            <div>
+              <span>
+                {format(parseISO(meetup.date), "d 'de' MMMM', às 'H'h'", {
+                  locale: pt,
+                })}
+              </span>
+              <button
+                type="button"
+                alt="Ver detalhes"
+                onClick={() => handlViewMeetup(meetup.id)}
+              >
+                <MdChevronRight size={24} />
+              </button>
+            </div>
+          </Meetup>
+        ))}
       </ul>
     </Container>
   );

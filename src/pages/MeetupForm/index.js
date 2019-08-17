@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { MdAddCircleOutline } from 'react-icons/md';
-import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import { parse } from 'date-fns';
 import { Form, Input } from '@rocketseat/unform';
+import PropTypes from 'prop-types';
+import { parse } from 'date-fns';
+import { toast } from 'react-toastify';
+import Loader from 'react-loader-spinner';
+import { MdAddCircleOutline } from 'react-icons/md';
 import * as Yup from 'yup';
 
 import api from '~/services/api';
@@ -16,75 +17,71 @@ import { Container } from './styles';
 
 const schema = Yup.object().shape({
   banner_id: Yup.number().required('Informe o banner do meetup'),
-  title: Yup.string().required('Como se chama o meetup?'),
-  description: Yup.string().required('Uma descrição seria bem-vinda'),
-  date: Yup.date().required('Quando?'),
-  location: Yup.string().required('Onde será o meetup?'),
+  title: Yup.string().required('Informe o nome do Meetup'),
+  description: Yup.string().required('Informe a descrição'),
+  date: Yup.date().required('Informe a data de realização'),
+  location: Yup.string().required('Informe o local do meetup'),
 });
 
 export default function MeetupForm({ match }) {
-  const { id } = match.params;
-
   const [loading, setLoading] = useState(false);
-  const [meetup, setMeetup] = useState({});
+  const [meetup, setMeetup] = useState(null);
 
   useEffect(() => {
     async function loadMeetup() {
       try {
         setLoading(true);
 
-        const response = await api.get(`/organizing/${id}`);
-        const { data } = response;
+        const { data } = await api.get(`/organizing/${match.params.id}`);
 
-        setMeetup({
-          ...data,
-          date: parse(data.date),
-          // past: isBefore(parse(data.date), new Date()),
-        });
+        setMeetup({ ...data, date: parse(data.date) });
       } catch (err) {
-        console.tron.log(err);
-        toast.error('Erro ao carregar meetup. Tente mais tarde.');
+        const error = err.response;
+
+        toast.error(
+          !!error && error.data.error
+            ? `Ops! ${error.data.error}`
+            : 'Ocorreu um erro, tente novamente'
+        );
       } finally {
         setLoading(false);
       }
     }
-    console.tron.log('e3');
-    if (id) {
+
+    if (match.params.id) {
       loadMeetup();
     }
-    // eslint-disable-next-line
-  }, [id]);
+  }, [match.params.id]);
 
   async function handleSubmit(data) {
     try {
-      setLoading(true);
+      if (meetup) {
+        await api.put(`/meetups/${meetup.id}`, data);
 
-      console.tron.error(data);
-      if (id) {
-        await api.put(`/meetups/${id}`, data);
-        toast.success('Meetup criado com successo');
+        toast.success('Meetup atualizado com sucesso');
       } else {
         await api.post('/meetups', data);
-        toast.success('Meetup criado com successo');
+
+        toast.success('Meetup cadastrado com sucesso');
       }
       history.goBack();
     } catch (err) {
-      const { data: errData } = err.response;
+      const error = err.response;
 
       toast.error(
-        errData && errData.error
-          ? errData.error
-          : 'Erro ao atualizar/cadastrar um meetup'
+        !!error && error.data.error
+          ? `Ops! ${error.data.error}`
+          : 'Ocorreu um erro, tente novamente'
       );
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
     <Container>
       {loading ? (
-        <h1>123</h1>
+        <div className="loading">
+          <Loader type="ThreeDots" color="#f94d6a" width={64} height={64} />
+        </div>
       ) : (
         <Form
           schema={schema}

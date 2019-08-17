@@ -7,6 +7,12 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
+  .loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
   header {
     display: flex;
     align-items: center;

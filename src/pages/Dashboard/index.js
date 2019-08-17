@@ -28,7 +28,13 @@ export default function Dashboard() {
           }))
         );
       } catch (err) {
-        toast.error(err);
+        const error = err.response;
+
+        toast.error(
+          !!error && error.data.error
+            ? `Ops! ${error.data.error}`
+            : 'Ocorreu um erro, tente novamente'
+        );
       } finally {
         setLoading(false);
       }
@@ -38,7 +44,7 @@ export default function Dashboard() {
   }, []);
 
   function handleNewMeetup() {
-    history.push('/meetup-create');
+    history.push('/meetup');
   }
 
   function handlViewMeetup(id) {

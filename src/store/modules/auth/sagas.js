@@ -23,7 +23,13 @@ export function* signIn({ payload }) {
 
     history.push('/dashboard');
   } catch (err) {
-    toast.error('Falha na autenticação, verifique seus dados');
+    const error = err.response;
+
+    toast.error(
+      !!error && error.data.error
+        ? `Ops! ${error.data.error}`
+        : 'Ocorreu um erro, tente novamente'
+    );
     yield put(signFailure());
   }
 }

@@ -20,6 +20,15 @@ export const Container = styled.div`
       display: none;
     }
   }
+
+  span {
+    color: #f94d6a;
+    align-self: flex-start;
+    margin: 0 5px 10px;
+    font-weight: bold;
+    opacity: 0.8;
+    font-size: 14px;
+  }
 `;
 
 export const Content = styled.div`

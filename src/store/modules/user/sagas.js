@@ -20,7 +20,13 @@ export function* updateProfile({ payload }) {
 
     yield put(updateProfileSuccess(response.data));
   } catch (err) {
-    toast.error('Erro ao atualizar perfil, confira seus dados');
+    const error = err.response;
+
+    toast.error(
+      !!error && error.data.error
+        ? `Ops! ${error.data.error}`
+        : 'Ocorreu um erro, tente novamente'
+    );
     yield put(updateProfileFailure());
   }
 }

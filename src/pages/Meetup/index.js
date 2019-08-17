@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { parseISO, format } from 'date-fns';
+import { parse, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import {
   MdEdit,
@@ -14,20 +14,25 @@ import api from '~/services/api';
 import { Container, Content } from './styles';
 
 export default function Meetup({ match }) {
-  const [meetup, setMeetup] = useState();
+  const [meetup, setMeetup] = useState(null);
 
   useEffect(() => {
     async function loadMeetup() {
-      const { data } = await api.get(`/meetups/${match.params.id}`);
+      const { data } = await api.get(`/organizing/${match.params.id}`);
 
-      setMeetup(data);
+      setMeetup({
+        ...data,
+        formattedDate: format(parse(data.date), 'D [de] MMMM [às] H[h]', {
+          locale: pt,
+        }),
+      });
     }
 
     loadMeetup();
   }, [match.params.id]);
 
   function handleEdit(id) {
-    history.push(`/meetup-register/${id}`);
+    history.push(`/meetup-edit/${id}`);
   }
 
   async function handleCancel(id) {
@@ -41,29 +46,36 @@ export default function Meetup({ match }) {
       <Container>
         <header>
           <h1>{meetup.title}</h1>
-          <aside>
-            <button type="button" onClick={() => handleEdit(meetup.id)}>
-              <MdEdit />
-              Editar
-            </button>
-            <button type="button" onClick={() => handleCancel(meetup.id)}>
-              <MdDeleteForever />
-              Cancelar
-            </button>
-          </aside>
+
+          {!meetup.past && (
+            <aside>
+              <button
+                type="button"
+                className="edit"
+                onClick={() => handleEdit(meetup.id)}
+              >
+                <MdEdit />
+                Editar
+              </button>
+              <button
+                type="button"
+                clas="cancel"
+                onClick={() => handleCancel(meetup.id)}
+              >
+                <MdDeleteForever />
+                Cancelar
+              </button>
+            </aside>
+          )}
         </header>
         <Content>
-          <img src={meetup.File.url} alt={meetup.title} />
+          <img src={meetup.banner.url} alt={meetup.title} />
           <span>{meetup.description}</span>
           <div>
             <div>
               <MdInsertInvitation size={20} />
             </div>
-            <span>
-              {format(parseISO(meetup.date), "d 'de' MMMM', às 'H'h'", {
-                locale: pt,
-              })}
-            </span>
+            <span>{meetup.formattedDate}</span>
             <div>
               <MdPlace size={20} />
             </div>

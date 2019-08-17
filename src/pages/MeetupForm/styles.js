@@ -4,10 +4,10 @@ import { darken } from 'polished';
 export const Container = styled.div`
   max-width: 940px;
   margin: 50px auto;
+
   form {
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
 
     input {
       background: rgba(0, 0, 0, 0.2);
@@ -40,7 +40,17 @@ export const Container = styled.div`
       }
     }
 
-    span {
+    .react-datepicker-wrapper {
+      .react-datepicker__input-container {
+        display: flex;
+
+        input {
+          flex-grow: 1;
+        }
+      }
+    }
+
+    > span {
       color: #f94d6a;
       align-self: flex-start;
       margin: 0 5px 10px;
@@ -49,14 +59,7 @@ export const Container = styled.div`
       font-size: 14px;
     }
 
-    hr {
-      border: 0;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.2);
-      margin: 20px 0 20px;
-    }
-
-    button {
+    > button {
       margin: 10px 0 0;
       height: 44px;
       padding: 0 20px 0 20px;

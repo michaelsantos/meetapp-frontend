@@ -21,7 +21,8 @@ export default function Routes() {
       <Route path="/profile" isPrivate component={Profile} />
 
       <Route path="/meetup/:id" isPrivate component={Meetup} />
-      <Route path="/meetup-register/:id?" isPrivate component={MeetupForm} />
+      <Route path="/meetup-create" isPrivate component={MeetupForm} />
+      <Route path="/meetup-edit/:id" isPrivate component={MeetupForm} />
     </Switch>
   );
 }

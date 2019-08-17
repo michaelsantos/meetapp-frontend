@@ -20,7 +20,7 @@ export default function Header() {
     <Container>
       <Content>
         <nav>
-          <Link to="/dashboard" title="Ir para Dashboard">
+          <Link to="/" title="Ir para Dashboard">
             <img src={logo} alt="Meetapp" />
           </Link>
         </nav>

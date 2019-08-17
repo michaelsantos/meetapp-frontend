@@ -42,8 +42,20 @@ export const Container = styled.div`
           margin-right: 10px;
         }
 
-        &:hover {
-          background: ${darken(0.05, '#f94d6a')};
+        &.edit {
+          background: #4dbaf9;
+
+          &:hover {
+            background: ${darken(0.05, '#4dbaf9')};
+          }
+        }
+
+        &.cancel {
+          background: #f94d6a;
+
+          &:hover {
+            background: ${darken(0.05, '#f94d6a')};
+          }
         }
       }
     }

@@ -7,37 +7,39 @@ import api from '~/services/api';
 import { Container, Content } from './styles';
 
 export default function BannerInput() {
-  const { defaultValue, registerField } = useField('File');
+  const { defaultValue, registerField } = useField('banner');
+  const { error } = useField('banner_id');
 
-  const [file, setFile] = useState();
-  const [preview, setPreview] = useState();
+  const [file, setFile] = useState(defaultValue && defaultValue.id);
+  const [preview, setPreview] = useState(defaultValue && defaultValue.url);
 
   const ref = useRef();
 
   useEffect(() => {
     if (ref.current) {
       registerField({
-        name: 'file_id',
+        name: 'banner_id',
         ref: ref.current,
         path: 'dataset.file',
       });
-
-      setPreview(defaultValue && defaultValue.url);
-      setFile(defaultValue && defaultValue.id);
     }
-  }, [ref, defaultValue]); // eslint-disable-line
+  }, [ref.current]); // eslint-disable-line
 
   async function handleChange(e) {
-    const data = new FormData();
+    try {
+      const data = new FormData();
 
-    data.append('file', e.target.files[0]);
+      data.append('file', e.target.files[0]);
 
-    const response = await api.post('files', data);
+      const response = await api.post('files', data);
 
-    const { id, url } = response.data;
+      const { id, url } = response.data;
 
-    setFile(id);
-    setPreview(url);
+      setFile(id);
+      setPreview(url);
+    } catch (err) {
+      console.tron.error(err);
+    }
   }
 
   return (
@@ -60,6 +62,8 @@ export default function BannerInput() {
           ref={ref}
         />
       </label>
+
+      {error && <span>{error}</span>}
     </Container>
   );
 }

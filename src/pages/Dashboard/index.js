@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { parseISO, format } from 'date-fns';
+import { parse, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import { toast } from 'react-toastify';
+import Loader from 'react-loader-spinner';
 import { MdAddCircleOutline, MdChevronRight } from 'react-icons/md';
 
 import history from '~/services/history';
@@ -9,20 +11,34 @@ import api from '~/services/api';
 import { Container, Meetup } from './styles';
 
 export default function Dashboard() {
+  const [loading, setLoading] = useState(true);
   const [meetups, setMeetups] = useState([]);
 
   useEffect(() => {
     async function loadMeetups() {
-      const { data } = await api.get('/organizer');
+      try {
+        const response = await api.get('/organizing');
 
-      setMeetups(data);
+        setMeetups(
+          response.data.map(meetup => ({
+            ...meetup,
+            formattedDate: format(parse(meetup.date), 'D [de] MMMM [às] H[h]', {
+              locale: pt,
+            }),
+          }))
+        );
+      } catch (err) {
+        toast.error(err);
+      } finally {
+        setLoading(false);
+      }
     }
 
     loadMeetups();
   }, []);
 
   function handleNewMeetup() {
-    history.push('/meetup-register');
+    history.push('/meetup-create');
   }
 
   function handlViewMeetup(id) {
@@ -38,28 +54,35 @@ export default function Dashboard() {
           Novo meetup
         </button>
       </header>
+      {loading ? (
+        <div className="loading">
+          <Loader type="ThreeDots" color="#f94d6a" width={64} height={64} />
+        </div>
+      ) : (
+        <>
+          {!meetups.length && (
+            <div className="empty">Você não possuí nenhum meetup.</div>
+          )}
 
-      <ul>
-        {meetups.map(meetup => (
-          <Meetup key={meetup.id}>
-            <strong>{meetup.title}</strong>
-            <div>
-              <span>
-                {format(parseISO(meetup.date), "d 'de' MMMM', às 'H'h'", {
-                  locale: pt,
-                })}
-              </span>
-              <button
-                type="button"
-                alt="Ver detalhes"
-                onClick={() => handlViewMeetup(meetup.id)}
-              >
-                <MdChevronRight size={24} />
-              </button>
-            </div>
-          </Meetup>
-        ))}
-      </ul>
+          <ul>
+            {meetups.map(meetup => (
+              <Meetup key={meetup.id} past={meetup.past ? 1 : 0}>
+                <strong>{meetup.title}</strong>
+                <div>
+                  <span>{meetup.formattedDate}</span>
+                  <button
+                    type="button"
+                    alt="Ver detalhes"
+                    onClick={() => handlViewMeetup(meetup.id)}
+                  >
+                    <MdChevronRight size={24} />
+                  </button>
+                </div>
+              </Meetup>
+            ))}
+          </ul>
+        </>
+      )}
     </Container>
   );
 }

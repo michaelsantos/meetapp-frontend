@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { parse, format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
+import nl2br from 'react-nl2br';
 import {
   MdEdit,
   MdDeleteForever,
@@ -27,9 +28,13 @@ export default function Meetup({ match }) {
 
         setMeetup({
           ...data,
-          formattedDate: format(parse(data.date), 'D [de] MMMM [às] H[h]', {
-            locale: pt,
-          }),
+          formattedDate: format(
+            parseISO(data.date),
+            "dd 'de' MMMM ', às' H'h'",
+            {
+              locale: pt,
+            }
+          ),
         });
       } catch (err) {
         const error = err.response;
@@ -96,7 +101,7 @@ export default function Meetup({ match }) {
                 </button>
                 <button
                   type="button"
-                  clas="cancel"
+                  className="cancel"
                   onClick={() => handleCancel(meetup.id)}
                 >
                   <MdDeleteForever />
@@ -107,7 +112,7 @@ export default function Meetup({ match }) {
           </header>
           <Content>
             <img src={meetup.banner.url} alt={meetup.title} />
-            <span>{meetup.description}</span>
+            <span>{nl2br(meetup.description)}</span>
             <div>
               <div>
                 <MdInsertInvitation size={20} />

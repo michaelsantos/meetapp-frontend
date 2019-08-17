@@ -41,12 +41,9 @@ export const Content = styled.div`
   color: rgba(255, 255, 255, 0.3);
   font-size: 20px;
   font-weight: bold;
+  border-radius: 4px;
 
   &:hover {
     opacity: 0.7;
-  }
-
-  svg {
-    margin-bottom: 4px;
   }
 `;

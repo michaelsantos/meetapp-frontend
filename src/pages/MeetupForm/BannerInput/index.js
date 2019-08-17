@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useField } from '@rocketseat/unform';
+import { toast } from 'react-toastify';
 import { MdPhotoCamera } from 'react-icons/md';
 
 import api from '~/services/api';
@@ -38,7 +39,13 @@ export default function BannerInput() {
       setFile(id);
       setPreview(url);
     } catch (err) {
-      console.tron.error(err);
+      const errorMsg = err.response;
+
+      toast.error(
+        !!errorMsg && errorMsg.data.error
+          ? `Ops! ${errorMsg.data.error}`
+          : 'Ocorreu um erro, tente novamente'
+      );
     }
   }
 

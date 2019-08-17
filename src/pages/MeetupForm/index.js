@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import PropTypes from 'prop-types';
-import { parse } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
 import { MdAddCircleOutline } from 'react-icons/md';
@@ -34,7 +34,7 @@ export default function MeetupForm({ match }) {
 
         const { data } = await api.get(`/organizing/${match.params.id}`);
 
-        setMeetup({ ...data, date: parse(data.date) });
+        setMeetup({ ...data, date: parseISO(data.date) });
       } catch (err) {
         const error = err.response;
 
@@ -64,8 +64,10 @@ export default function MeetupForm({ match }) {
 
         toast.success('Meetup cadastrado com sucesso');
       }
-      history.goBack();
+
+      history.push('/dashboard');
     } catch (err) {
+      console.tron.log(err);
       const error = err.response;
 
       toast.error(

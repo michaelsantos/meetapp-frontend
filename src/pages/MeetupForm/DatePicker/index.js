@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useField } from '@rocketseat/unform';
 import ReactDatePicker from 'react-datepicker';
+import pt from 'date-fns/locale/pt';
 import PropTypes from 'prop-types';
 
 export default function DatePicker({ name, placeholder }) {
@@ -28,8 +29,10 @@ export default function DatePicker({ name, placeholder }) {
         minDate={new Date()}
         showTimeSelect
         timeIntervals={60}
+        timeCaption="Hora"
         timeFormat="HH:mm"
-        dateFormat="dd 'de' MMMM 'às' HH'h'"
+        locale={pt}
+        dateFormat="dd 'de' MMMM ', às' HH'h'"
         ref={ref}
         placeholderText={placeholder}
       />

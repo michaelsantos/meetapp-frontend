@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { parse, format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { toast } from 'react-toastify';
 import Loader from 'react-loader-spinner';
@@ -22,9 +22,13 @@ export default function Dashboard() {
         setMeetups(
           response.data.map(meetup => ({
             ...meetup,
-            formattedDate: format(parse(meetup.date), 'D [de] MMMM [às] H[h]', {
-              locale: pt,
-            }),
+            formattedDate: format(
+              parseISO(meetup.date),
+              "dd 'de' MMMM ', às' H'h'",
+              {
+                locale: pt,
+              }
+            ),
           }))
         );
       } catch (err) {

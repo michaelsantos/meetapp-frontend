@@ -50,7 +50,13 @@ export function* signUp({ payload }) {
 
     history.push('/');
   } catch (err) {
-    toast.error('Falha no cadastro, verifique seus dados');
+    const error = err.response;
+
+    toast.error(
+      !!error && error.data.error
+        ? `Ops! ${error.data.error}`
+        : 'Ocorreu um erro, tente novamente'
+    );
     yield put(signFailure());
   }
 }

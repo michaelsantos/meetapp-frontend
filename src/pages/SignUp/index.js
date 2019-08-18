@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import logo from '~/assets/logo.svg';
 
-import { singUpRequest } from '~/store/modules/auth/actions';
+import { signUpRequest } from '~/store/modules/auth/actions';
 
 const schema = Yup.object().shape({
   name: Yup.string().required('O nome é obrigatório'),
@@ -23,7 +23,7 @@ export default function SignUp() {
   const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit({ name, email, password }) {
-    dispatch(singUpRequest(name, email, password));
+    dispatch(signUpRequest(name, email, password));
   }
 
   return (

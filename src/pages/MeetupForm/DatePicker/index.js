@@ -32,7 +32,7 @@ export default function DatePicker({ name, placeholder }) {
         timeCaption="Hora"
         timeFormat="HH:mm"
         locale={pt}
-        dateFormat="dd 'de' MMMM ', às' HH'h'"
+        dateFormat="dd 'de' MMMM', às' HH'h'"
         ref={ref}
         placeholderText={placeholder}
       />

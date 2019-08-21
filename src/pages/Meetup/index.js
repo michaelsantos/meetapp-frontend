@@ -30,7 +30,7 @@ export default function Meetup({ match }) {
           ...data,
           formattedDate: format(
             parseISO(data.date),
-            "dd 'de' MMMM ', às' H'h'",
+            "dd 'de' MMMM', às' H'h'",
             {
               locale: pt,
             }
